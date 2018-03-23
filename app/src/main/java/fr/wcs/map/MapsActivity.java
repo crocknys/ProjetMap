@@ -1,14 +1,28 @@
 package fr.wcs.map;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Map;
+
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NONE;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -38,11 +52,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(43.6014536,10.4421452000000272) , 15.0f) );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(43.6014536, 1.4421452000000272), 17.0f));
 
-        // Add a marker in Sydney and move the camera
+
+        // Add a marker in Sydney and move the camera in hard way
+        /*
         LatLng toulouse = new LatLng(43.6014536, 1.4421452000000272);
         mMap.addMarker(new MarkerOptions().position(toulouse).title("Wild Code School Toulouse"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(toulouse));
+        */
+
+        //Style of the map getting the Json config
+
+        MapStyleOptions carte = MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle);
+        googleMap.setMapStyle(carte);
+
+        //Trial of personnalised pictures
+
+
+
+        LatLng toulouse = new LatLng(43.6014536, 1.4421452000000272);
+        MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.poubelle));
+        markerOptions.position(toulouse);
+        mMap.addMarker(markerOptions);
+
+
+        //Changing view button
+        Button switcher = findViewById(R.id.button);
+
+        switcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent changeScreen = new Intent(MapsActivity.this, listView.class);
+                MapsActivity.this.startActivity(changeScreen);
+            }
+        });
     }
 }
